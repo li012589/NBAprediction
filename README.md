@@ -1,2 +1,2 @@
 # NBAprediction
-a learning product 
+a learning product of online lesson on Shiyanlou.com
