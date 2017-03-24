@@ -44,3 +44,24 @@ def calc_elo(win_team, lose_team):
     new_loser_rank=lose_team-(new_winner_rank-winner_rank)
     return new_winner_rank, new_loser_rank
 
+def build_dataSet(all_data):
+    print("Building data set..")
+    x=[]
+    skip=0
+    for index, row in all_data.iterrows():
+        Wteam=row['Wteam']
+        Lteam=row['Lteam']
+        team1_elo=get_elo(Wteam)
+        team2_elo=get_elo(Lteam)
+        if row['WLoc'] == 'H':
+            team1_elo += 100
+        else:
+            team2_elo +=100
+        team1_features = [team1_elo]
+        team2_features = [team2_elo]
+
+        for key, value in team_stats.loc[Wteam].iteritems():
+            team1_features.append(value)
+        for key, value in team_stats.loc[Lteam].iteritems():
+            team2_features.append(value)
+        
