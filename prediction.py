@@ -64,4 +64,4 @@ def build_dataSet(all_data):
             team1_features.append(value)
         for key, value in team_stats.loc[Lteam].iteritems():
             team2_features.append(value)
-        
+            
