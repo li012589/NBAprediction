@@ -64,4 +64,16 @@ def build_dataSet(all_data):
             team1_features.append(value)
         for key, value in team_stats.loc[Lteam].iteritems():
             team2_features.append(value)
-            
+        if random.random() > 0.5:
+            X.append(team1_features + team2_features)
+            y.append(0)
+        else:
+            X.append(team2_features + team1_features)
+            y.append(1)
+        if skip == 0:
+            print X
+            ship = 1
+        new_winner_rank, new_loser_rank = calc_elo(Wteam, Lteam)
+        team_elo[Wteam] = new_winner_rank
+        team_elo[Lteam] = new_loser_rank
+    return np.nan_to_num(X), y
