@@ -48,7 +48,6 @@ def calc_elo(win_team, lose_team):
 def build_dataSet(all_data):
     print("Building data set..")
     x=[]
-    skip=0
     for index, row in all_data.iterrows():
         Wteam=row['WTeam']
         Lteam=row['LTeam']
@@ -71,13 +70,10 @@ def build_dataSet(all_data):
         else:
             X.append(team2_features + team1_features)
             y.append(1)
-        if skip == 0:
-            print X
-            skip = 1
         new_winner_rank, new_loser_rank = calc_elo(Wteam, Lteam)
         team_elo[Wteam] = new_winner_rank
         team_elo[Lteam] = new_loser_rank
-    return np.nan_to_num(X), y
+    return np.nan_to_num(X), np.array(y)
 
 def predict_winner(team_1, team_2, model):
     features = []
