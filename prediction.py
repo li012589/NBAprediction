@@ -79,6 +79,18 @@ def build_dataSet(all_data):
         team_elo[Lteam] = new_loser_rank
     return np.nan_to_num(X), y
 
+def predict_winner(team_1, team_2, model):
+    features = []
+
+    features.append(get_elo(team_1))
+    for key, value in team_stats.loc[team_1].iteritems():
+        features.append(value)
+    features.append(get_elo(team_2)+100)
+    for key, value in team_stats.loc[team_2].iteritems():
+        features.append(value)
+    features = np.nan_to_num(features)
+    return model.predict_proba([features])
+
 
 if __name__ == '__main__':
 
@@ -92,3 +104,9 @@ if __name__ == '__main__':
     X, y = build_dataSet(result_data)
 
     print("Fitting on %d game samples.." % len(X))
+
+    model = linear_model.LogisticRegression()
+    model.fit(X, y)
+    print("Doing cross_validation..")
+    print(cross_val_score(model, X, y, cv = 10, scoring='accuracy', n_jobs=-1).mean())
+    
