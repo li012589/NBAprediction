@@ -105,4 +105,25 @@ if __name__ == '__main__':
     model.fit(X, y)
     print("Doing cross_validation..")
     print(cross_val_score(model, X, y, cv = 10, scoring='accuracy', n_jobs=-1).mean())
-    
+
+    print('Predicting on new schedle..')
+    schedule1617 = pd.read_csv(folder + '/16-17Schedule.csv')
+    result = []
+    for index, row in schedule1617.iterrows():
+        team1 = row['Vteam']
+        team2 = row['Hteam']
+        pred = predict_winner(team1, team2, model)
+        prob = pred[0][0]
+        if prob > 0.5:
+            winner = team1
+            loser = team2
+            result.append([winner, loser, prob])
+        else:
+            winner = team2
+            loser = team1
+            result.append([winner, loser, 1-prob])
+
+    with open('16-17Result.csv','wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(['win', 'lose', 'probability'])
+        writer.writerows(result)
