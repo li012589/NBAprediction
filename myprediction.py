@@ -20,7 +20,11 @@ def readData(Mstat, Ostat, Tstat):
     return dataSet
 
 def initElo(dataSet):
-    for index, row in dataSet:
+    for team in dataSet['Team']:
+        teamElo[team]=baseElo
+
+def eloCalu(resultDF):
+    for index, row in resultDF.iterrows():
         pass
 
 def main():
@@ -31,7 +35,8 @@ def main():
     csvResult = pd.read_csv(folder + '/2015-2016_result.csv')
 
     dataSet = readData(Mstat, Ostat, Tstat)
-    
+    initElo(dataSet)
+    eloCalu(csvResult)
 
 
 if __name__ == '__main__':
