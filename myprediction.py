@@ -41,6 +41,11 @@ def eloCalc(resultDF):
         teamElo[winTeam]=newWinTeamRank
         teamElo[loseTeam]=newLoseTeamRank
 
+def buildDateSet(dataSet,csvResult):
+    X=[]
+    y=[]
+    return X,y
+
 def main():
     Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
     Ostat = pd.read_csv(folder + '/15-16Opponent_Per_Game_Stat.csv')
@@ -51,7 +56,7 @@ def main():
     dataSet = readData(Mstat, Ostat, Tstat)
     initElo(dataSet)
     eloCalc(csvResult)
-
+    X,y=buildDateSet(dataSet,csvResult)
 
 if __name__ == '__main__':
     main()
