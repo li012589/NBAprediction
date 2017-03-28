@@ -29,6 +29,10 @@ def eloCalc(resultDF):
         loseTeam=row['LTeam']
         winTeamRank=teamElo[winTeam]
         loseTeamRank=teamElo[loseTeam]
+        if row['WLoc'] == 'H':
+            winTeamRank += 100
+        else:
+            loseTeamRank +=100
         if winTeamRank < 2100:
             k=32
         elif winTeamRank >=2100 and winTeamRank <2400:
@@ -44,6 +48,10 @@ def eloCalc(resultDF):
 def buildDateSet(dataSet,csvResult):
     X=[]
     y=[]
+    for index, row in csvResult.iterrows():
+        winTeam = row['WTeam']
+        loseTeam = row['LTeam']
+        
     return X,y
 
 def main():
