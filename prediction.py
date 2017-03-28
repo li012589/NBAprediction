@@ -47,7 +47,7 @@ def calc_elo(win_team, lose_team):
 
 def build_dataSet(all_data):
     print("Building data set..")
-    x=[]
+    X=[]
     for index, row in all_data.iterrows():
         Wteam=row['WTeam']
         Lteam=row['LTeam']
