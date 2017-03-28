@@ -12,8 +12,16 @@ y = []
 folder = 'data'
 
 def readData(Mstat, Ostat, Tstat):
-    dataSet = []
+    dataSet = Mstat.drop(['Rk','Arena'], axis=1)
+    tmp = Ostat.drop(['Rk','G','MP'],axis=1)
+    dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
+    tmp = Tstat.drop(['Rk','G','MP'],axis=1)
+    dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
     return dataSet
+
+def initElo(dataSet):
+    for index, row in dataSet:
+        pass
 
 def main():
     Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
