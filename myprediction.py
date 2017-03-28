@@ -23,9 +23,23 @@ def initElo(dataSet):
     for team in dataSet['Team']:
         teamElo[team]=baseElo
 
-def eloCalu(resultDF):
+def eloCalc(resultDF):
     for index, row in resultDF.iterrows():
-        pass
+        winTeam=row['WTeam']
+        loseTeam=row['LTeam']
+        winTeamRank=teamElo[winTeam]
+        loseTeamRank=teamElo[loseTeam]
+        if winTeamRank < 2100:
+            k=32
+        elif winTeamRank >=2100 and winTeamRank <2400:
+            k=24
+        else:
+            k=16
+        odd=1/(1+math.pow(10,(loseTeamRank-winTeamRank)/400))
+        newWinTeamRank=round(winTeamRank+k*(1-odd))
+        newLoseTeamRank=loseTeamRank-(newWinTeamRank-winTeamRank)
+        teamElo[winTeam]=newWinTeamRank
+        teamElo[loseTeam]=newLoseTeamRank
 
 def main():
     Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
@@ -36,7 +50,7 @@ def main():
 
     dataSet = readData(Mstat, Ostat, Tstat)
     initElo(dataSet)
-    eloCalu(csvResult)
+    eloCalc(csvResult)
 
 
 if __name__ == '__main__':
