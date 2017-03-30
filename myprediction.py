@@ -52,7 +52,8 @@ def buildDateSet(dataSet,csvResult):
         winTeam = row['WTeam']
         loseTeam = row['LTeam']
         line=[]
-        
+        for index, key in dataSet.loc[winTeam].iteritems():
+            pass
     return X,y
 
 def main():
