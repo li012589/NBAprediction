@@ -17,7 +17,7 @@ def readData(Mstat, Ostat, Tstat):
     dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
     tmp = Tstat.drop(['Rk','G','MP'],axis=1)
     dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
-    return dataSet.set_index('Team',drop=False)
+    return dataSet
 
 def initElo(dataSet):
     for team in dataSet['Team']:
@@ -62,8 +62,9 @@ def buildDateSet(dataSet,csvResult):
             y.append(0)
         else:
             X.append(line2+line1)
-            y.append(0)
-            
+            y.append(1)
+    print X
+    print y
     return X,y
 
 def main():
@@ -77,7 +78,7 @@ def main():
     #print dataSet
     initElo(dataSet)
     eloCalc(csvResult)
-    X,y=buildDateSet(dataSet,csvResult)
+    X,y=buildDateSet(dataSet.set_index('Team'),csvResult)
 
 if __name__ == '__main__':
     main()
