@@ -17,7 +17,7 @@ def readData(Mstat, Ostat, Tstat):
     dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
     tmp = Tstat.drop(['Rk','G','MP'],axis=1)
     dataSet = pd.merge(dataSet,tmp,how='left',on='Team')
-    return dataSet
+    return dataSet.set_index('Team',drop=False)
 
 def initElo(dataSet):
     for team in dataSet['Team']:
@@ -51,6 +51,7 @@ def buildDateSet(dataSet,csvResult):
     for index, row in csvResult.iterrows():
         winTeam = row['WTeam']
         loseTeam = row['LTeam']
+        line=[]
         
     return X,y
 
@@ -62,6 +63,7 @@ def main():
     csvResult = pd.read_csv(folder + '/2015-2016_result.csv')
 
     dataSet = readData(Mstat, Ostat, Tstat)
+    #print dataSet
     initElo(dataSet)
     eloCalc(csvResult)
     X,y=buildDateSet(dataSet,csvResult)
