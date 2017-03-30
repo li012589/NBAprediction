@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 import random
+import csv
 import numpy as np
 from sklearn import linear_model
 from sklearn.model_selection import cross_val_score
@@ -64,6 +65,18 @@ def buildDateSet(dataSet,csvResult):
             X.append(line2+line1)
             y.append(1)
     return np.nan_to_num(X),np.nan_to_num(y)
+
+def newPrediction(team1,team2,model,dataSet):
+    testX=[teamElo[team1]]
+    for key, value in dataSet.loc[team1].iteritems():
+        testX.append(value)
+    testX.append(teamElo[team2]+100)
+    for key, value in dataSet.loc[team2].iteritems():
+        testX.append(value)
+    testX=np.nan_to_num(testX)
+    prob=model.predict_proba([testX])
+    return prob
+
 def main():
     Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
     Ostat = pd.read_csv(folder + '/15-16Opponent_Per_Game_Stat.csv')
@@ -79,6 +92,22 @@ def main():
     linerModel=linear_model.LogisticRegression()
     linerModel.fit(X,y)
     print (cross_val_score(linerModel,X,y,cv=10,scoring='accuracy',n_jobs=-1).mean())
+    result = []
+    for index,row in schedule.iterrows():
+        team1 = row['Vteam']
+        team2 = row['Hteam']
+        prob = newPrediction(team1,team2,linerModel,dataSet.set_index('Team'))
+        if prob[0][0] > 0.5:
+            winner = team1
+            loser = team2
+        else:
+            winner = team2
+            loser = team1
+        result.append([winner,loser])
+    with open('16-17myResult.csv','wb') as fileResult:
+        writer = csv.writer(fileResult)
+        writer.writerow(['winner','loser'])
+        writer.writerows(result)
 
 if __name__ == '__main__':
     main()
