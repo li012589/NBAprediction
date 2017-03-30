@@ -63,10 +63,7 @@ def buildDateSet(dataSet,csvResult):
         else:
             X.append(line2+line1)
             y.append(1)
-    print X
-    print y
-    return X,y
-
+    return np.nan_to_num(X),np.nan_to_num(y)
 def main():
     Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
     Ostat = pd.read_csv(folder + '/15-16Opponent_Per_Game_Stat.csv')
@@ -79,6 +76,9 @@ def main():
     initElo(dataSet)
     eloCalc(csvResult)
     X,y=buildDateSet(dataSet.set_index('Team'),csvResult)
+    linerModel=linear_model.LogisticRegression()
+    linerModel.fit(X,y)
+    print (cross_val_score(linerModel,X,y,cv=10,scoring='accuracy',n_jobs=-1).mean())
 
 if __name__ == '__main__':
     main()
